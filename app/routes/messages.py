@@ -19,10 +19,18 @@ def get_message(message_id):
 
 @messages_bp.route('/', methods=['POST'])
 def create_message():
-    data = message_schema.load(request.get_json())
-    db.session.add(data)
+    data = request.get_json()
+
+    # Cria nova mensagem vinculando ao usuário de ID 1
+    nova_mensagem = Message(
+        content=data.get('content'),
+        autor=1  # <- usuário padrão
+    )
+
+    db.session.add(nova_mensagem)
     db.session.commit()
-    return message_schema.jsonify(data), 201
+
+    return message_schema.jsonify(nova_mensagem), 201
 
 @messages_bp.route('/<int:message_id>', methods=['PUT'])
 def update_message(message_id):

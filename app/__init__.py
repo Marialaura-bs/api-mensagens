@@ -7,6 +7,7 @@ from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
+migrate = Migrate()
 ma = Marshmallow()
 
 def create_app():
@@ -15,10 +16,15 @@ def create_app():
     app.json.sort_keys = False
 
     db.init_app(app)
+    migrate.init_app(app, db)
     ma.init_app(app)
 
     from .routes.messages import messages_bp
     app.register_blueprint(messages_bp, url_prefix="/messages")
+    
+    from .routes.usuarios import usuarios_bp
+    app.register_blueprint(usuarios_bp, url_prefix="/users")
+
 
     # Tratadores globais de erro (explicados na seção 5.6)
     register_error_handlers(app)

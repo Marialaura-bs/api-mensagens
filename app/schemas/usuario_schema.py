@@ -11,6 +11,6 @@ class UsuarioSchema(ma.SQLAlchemyAutoSchema):
     email = fields.Email(required=True)
     nome= fields.Str(required=True, validate=validate.Length(min=1))
     senha= fields.Str(required=True, validate=[
-            validate.Length(min=8),  # tamanho mínimo
-            validate.Regexp( r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@!%*?&]).+$')
+        validate.Length(min=8),  # tamanho mínimo
+        validate.Regexp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@!%*?&]).+$')
     ])

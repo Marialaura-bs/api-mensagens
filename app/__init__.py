@@ -3,6 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from .config import Config
 from flask_marshmallow import Marshmallow
+'''
+importa, do pacote flask_marshmallow, a classe Marshmallow, responsável por serializar e validar dados. Com ela, pode-se criar esquemas de validação de
+dados a partir de models do SQLAlchemy, impondo restrições a seus campos, e tratamento de erros globais. Além disso, ela pode serializar e desserializar dados; no caso,
+está sendo usada para transformar objetos Python em JSON (para criar dados) e vice-versa (para recuperar dados).
+
+Esse pacote, flask_marshmallow, chama-se assim porque é uma extensão Flask, que integra o Marshmallow (uma biblioteca de serialização e validação de dados)
+com o Flask e o Flask SQLAlchemy, um ORM.
+'''
 from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
 

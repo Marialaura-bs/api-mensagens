@@ -25,7 +25,6 @@ def create_app():
     from .routes.usuarios import usuarios_bp
     app.register_blueprint(usuarios_bp, url_prefix="/users")
 
-
     # Tratadores globais de erro (explicados na seção 5.6)
     register_error_handlers(app)
 

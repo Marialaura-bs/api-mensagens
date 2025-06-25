@@ -3,7 +3,6 @@ from ..models.usuario import Usuario
 from .. import db
 from ..schemas.usuario_schema import UsuarioSchema
 
-
 usuarios_bp = Blueprint('users', __name__)
 user_schema = UsuarioSchema()
 users_schema = UsuarioSchema(many=True)

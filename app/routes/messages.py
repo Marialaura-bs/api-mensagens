@@ -2,6 +2,8 @@ from flask import Blueprint, request
 from ..models.message import Message
 from .. import db
 from ..schemas.message_schema import MessageSchema
+from ..models.comentario import Comentario
+from ..schemas.comentario_schema import ComentarioSchema
 
 messages_bp = Blueprint('messages', __name__)
 message_schema = MessageSchema()
@@ -49,3 +51,12 @@ def delete_message(message_id):
     db.session.delete(message)
     db.session.commit()
     return '', 204
+
+
+comentario_schema = ComentarioSchema()
+comentarios_schema = ComentarioSchema(many=True)
+
+@messages_bp.route('/<int:message_id>/comentarios', methods=['GET'])
+def get_comentario(message_id):
+    comentario = Comentario.query.get_or_404(message_id)
+    return comentario_schema.jsonify(comentario), 200

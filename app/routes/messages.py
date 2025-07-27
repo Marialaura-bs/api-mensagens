@@ -69,15 +69,15 @@ def get_comentario(message_id, comentario_id):
 
 @messages_bp.route('/<int:message_id>/comentarios', methods=['POST'])
 def create_comentario(message_id):
-    mensagem=Message.query.get(message_id)
+    mensagem = Message.query.get(message_id)
     if not mensagem:
         abort(404)
+
     data = comentario_schema.load(request.get_json())
-    # Cria nova mensagem vinculando ao usuário de ID 1
     novo_comentario = Comentario(
         content=data.content,
-        autor=1,  # <- usuário padrão
-        mensagem=data.mensagem
+        autor=1,
+        mensagem=message_id
     )
     db.session.add(novo_comentario)
     db.session.commit()
@@ -85,14 +85,21 @@ def create_comentario(message_id):
 
 @messages_bp.route('/<int:message_id>/comentarios/<int:comentario_id>', methods=['PUT'])
 def update_comentario(message_id, comentario_id):
-    mensagem=Message.query.get(message_id)
+    mensagem = Message.query.get(message_id)
     if not mensagem:
         abort(404)
+
     comentario = Comentario.query.get_or_404(comentario_id)
-    data = comentario_schema.load(request.get_json())
+
+    # Verifica se o comentário pertence à mensagem correta
+    if comentario.mensagem != message_id:
+        abort(400, description="Comentário não pertence a essa mensagem.")
+
+    # Permite atualizações parciais (não exige todos os campos)
+    data = comentario_schema.load(request.get_json(), partial=True)
 
     if 'content' in request.get_json():
-        comentario.content = data.content
+        comentario.content = data.content 
 
     db.session.commit()
     return comentario_schema.jsonify(comentario), 200

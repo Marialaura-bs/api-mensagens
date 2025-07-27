@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from ..models.message import Message
 from .. import db
 from ..schemas.message_schema import MessageSchema
@@ -21,10 +21,10 @@ def get_message(message_id):
 
 @messages_bp.route('/', methods=['POST'])
 def create_message():
-    data = MessageSchema.load(request.get_json())
+    data = message_schema.load(request.get_json())
     # Cria nova mensagem vinculando ao usuário de ID 1
     nova_mensagem = Message(
-        content=data.get('content'),
+        content=data.content,
         autor=1  # <- usuário padrão
     )
 
@@ -59,15 +59,25 @@ def get_comentarios(message_id):
     comentarios = Comentario.query.filter_by(mensagem=message_id).all()
     return comentarios_schema.jsonify(comentarios), 200
 
+@messages_bp.route('/<int:message_id>/comentarios/<int:comentario_id>', methods=['GET'])
+def get_comentario(message_id, comentario_id):
+    mensagem=Message.query.get(message_id)
+    if not mensagem:
+        abort(404)
+    comentario=Comentario.query.get(comentario_id)
+    return comentario_schema.jsonify(comentario), 200
+
 @messages_bp.route('/<int:message_id>/comentarios', methods=['POST'])
 def create_comentario(message_id):
-    data = request.get_json()
-    message=Message.query.get_or_404(message_id)
+    mensagem=Message.query.get(message_id)
+    if not mensagem:
+        abort(404)
+    data = comentario_schema.load(request.get_json())
     # Cria nova mensagem vinculando ao usuário de ID 1
     novo_comentario = Comentario(
-        content=data.get('content'),
+        content=data.content,
         autor=1,  # <- usuário padrão
-        mensagem=message_id
+        mensagem=data.mensagem
     )
     db.session.add(novo_comentario)
     db.session.commit()
@@ -75,9 +85,11 @@ def create_comentario(message_id):
 
 @messages_bp.route('/<int:message_id>/comentarios/<int:comentario_id>', methods=['PUT'])
 def update_comentario(message_id, comentario_id):
-    message=Message.query.get_or_404(message_id)
+    mensagem=Message.query.get(message_id)
+    if not mensagem:
+        abort(404)
     comentario = Comentario.query.get_or_404(comentario_id)
-    data = comentario_schema.load(request.get_json(), partial=True)#por que o message_id não é atualizado?
+    data = comentario_schema.load(request.get_json())
 
     if 'content' in request.get_json():
         comentario.content = data.content
@@ -85,10 +97,13 @@ def update_comentario(message_id, comentario_id):
     db.session.commit()
     return comentario_schema.jsonify(comentario), 200
 
-@messages_bp.route('/<int:message_id>comentarios/<int:comentario_id>', methods=['DELETE'])
+@messages_bp.route('/<int:message_id>/comentarios/<int:comentario_id>', methods=['DELETE'])
 def delete_comentario(message_id, comentario_id):
-    message = Message.query.get_or_404(message_id)
+    mensagem=Message.query.get(message_id)
+    if not mensagem:
+        abort(404)
+    #Excluir mensagem deve estar permitido apenas para o usuário que a criou
     comentario = Comentario.query.get_or_404(comentario_id)
-    db.session.delete(message)
+    db.session.delete(comentario)
     db.session.commit()
     return '', 204

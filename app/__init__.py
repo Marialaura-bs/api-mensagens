@@ -5,10 +5,12 @@ from .config import Config
 from flask_marshmallow import Marshmallow
 from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
+from flask_jwt_extended import JWTManager
 
 db = SQLAlchemy()
 migrate = Migrate()
 ma = Marshmallow()
+jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
@@ -18,7 +20,8 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
-
+    jwt.init_app(app)
+    
     from .routes.messages import messages_bp
     app.register_blueprint(messages_bp, url_prefix="/messages")
     
@@ -28,7 +31,10 @@ def create_app():
     from .routes.comments import comments_bp
     app.register_blueprint(comments_bp)
 
-    # Tratadores globais de erro (explicados na seção 5.6)
+    from app.routes.auth import auth_bp
+    app.register_blueprint(auth_bp)
+
+    # Tratadores globais de erro
     register_error_handlers(app)
 
     return app

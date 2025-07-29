@@ -2,13 +2,13 @@ from ..models.usuario import Usuario
 from .. import db
 
 def listar_usuarios():
-    return User.query.all()
+    return Usuario.query.all()
 
 def obter_usuario(user_id):
-    return User.query.get(user_id)
+    return Usuario.query.get(user_id)
 
 def criar_usuario(dados):
-    novo = User(**dados)
+    novo = Usuario(**dados)
     db.session.add(novo)
     db.session.commit()
     return novo

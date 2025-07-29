@@ -25,6 +25,7 @@ def get_comment(mensagem, comment_id):
 def create_comment(mensagem):
     data = request.get_json()
     data['mensagem'] = mensagem
+    data["autor"] = 1  # usuário fixo
     validated_data = comment_schema.load(data)
     comment = comment_controller.criar_comentario(validated_data)
     return comment_schema.jsonify(comment), 201

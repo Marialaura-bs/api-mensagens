@@ -21,6 +21,7 @@ def get_message(message_id):
 @messages_bp.route('/', methods=['POST'])
 def create_message():
     data = message_schema.load(request.get_json())
+    data["autor"] = 1  # usuário fixo
     message = message_controller.criar_mensagem(data)
     return message_schema.jsonify(message), 201
 

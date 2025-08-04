@@ -1,48 +1,45 @@
-from flask import Blueprint, request, jsonify
-from ..models.usuario import Usuario
-from .. import db
+from flask import Blueprint, request, jsonify, abort
 from ..schemas.usuario_schema import UsuarioSchema
-
+from ..controllers import user_controller
+from werkzeug.security import generate_password_hash
 
 usuarios_bp = Blueprint('users', __name__)
 user_schema = UsuarioSchema()
 users_schema = UsuarioSchema(many=True)
 
-@usuarios_bp.route('/', methods=['GET'])
+@usuarios_bp.route("/", methods=["GET"])
 def get_users():
-    users = Usuario.query.all()
+    users = user_controller.listar_usuarios()
     return users_schema.jsonify(users), 200
 
-@usuarios_bp.route('/<int:usuario_id>', methods=['GET'])
-def get_usuario(usuario_id):
-    usuario = Usuario.query.get_or_404(usuario_id)
-    return user_schema.jsonify(usuario), 200
+@usuarios_bp.route("/<int:user_id>", methods=["GET"])
+def get_user(user_id):
+    user = user_controller.obter_usuario(user_id)
+    if not user:
+        abort(404, description="Usuário não encontrado.")
+    return user_schema.jsonify(user), 200
 
-@usuarios_bp.route('/', methods=['POST'])
-def create_usuario():
-    data = user_schema.load(request.get_json())
-    db.session.add(data)
-    db.session.commit()
-    return user_schema.jsonify(data), 201
+@usuarios_bp.route("/", methods=["POST"])
+def create_user():
+    data = request.get_json()
+    data["senha"] = generate_password_hash(data["senha"])
+    validated = user_schema.load(data)
+    novo = user_controller.criar_usuario(validated)
+    return user_schema.jsonify(novo), 201
 
-@usuarios_bp.route('/<int:usuario_id>', methods=['PUT'])
-def update_usuario(usuario_id):
-    usuario = Usuario.query.get_or_404(usuario_id)
+@usuarios_bp.route("/<int:user_id>", methods=["PUT"])
+def update_user(user_id):
+    user = user_controller.obter_usuario(user_id)
+    if not user:
+        abort(404)
     data = user_schema.load(request.get_json(), partial=True)
+    atualizado = user_controller.atualizar_usuario(user, data)
+    return user_schema.jsonify(atualizado), 200
 
-    if 'email' in request.get_json():
-        usuario.email = data.email
-    if 'nome' in request.get_json():
-        usuario.nome = data.nome
-    if 'senha' in request.get_json():
-        usuario.senha = data.senha
-
-    db.session.commit()
-    return user_schema.jsonify(usuario), 200
-
-@usuarios_bp.route('/<int:usuario_id>', methods=['DELETE'])
-def delete_usuario(usuario_id):
-    usuario = Usuario.query.get_or_404(usuario_id)
-    db.session.delete(usuario)
-    db.session.commit()
-    return jsonify({"Mensagem": "Mensagem deletada com sucesso."}), 204
+@usuarios_bp.route("/<int:user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    user = user_controller.obter_usuario(user_id)
+    if not user:
+        abort(404)
+    user_controller.deletar_usuario(user)
+    return '', 204

@@ -6,14 +6,14 @@ class UsuarioSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Usuario
         load_instance = False
-        fields = ("id", "email", "nome", "senha", "admin" )
+        fields = ("id", "nome", "email", "senha", "perfil" )
     id = fields.Int(dump_only=True)
-    email = fields.Email(required=True)
     nome= fields.Str(required=True, validate=validate.Length(min=2))
+    email = fields.Email(required=True)
     senha= fields.Str(required=True, load_only=True, validate=[
-        validate.Length(min=8),  # tamanho mínimo
+        validate.Length(min=6),  # tamanho mínimo
         validate.Regexp(
     r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).+$',
     error="A senha deve conter ao menos uma letra maiúscula, uma minúscula, um número e um símbolo.")
     ])
-    admin = fields.Bool(dump_only=True)
+    perfil = fields.Bool(dump_only=True)

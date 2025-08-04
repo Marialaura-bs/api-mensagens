@@ -22,14 +22,14 @@ def create_app():
     ma.init_app(app)
     jwt.init_app(app)
     
-    from .routes.messages import messages_bp
-    app.register_blueprint(messages_bp, url_prefix="/messages")
+    from .routes.mensagens import mensagens_bp
+    app.register_blueprint(mensagens_bp, url_prefix="/mensagens")
     
     from .routes.usuarios import usuarios_bp
-    app.register_blueprint(usuarios_bp, url_prefix="/users")
+    app.register_blueprint(usuarios_bp, url_prefix="/usuarios")
 
-    from .routes.comments import comments_bp
-    app.register_blueprint(comments_bp)
+    from .routes.comentarios import comentarios_bp
+    app.register_blueprint(comentarios_bp)
 
     from app.routes.auth import auth_bp
     app.register_blueprint(auth_bp)

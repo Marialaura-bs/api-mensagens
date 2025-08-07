@@ -1,7 +1,7 @@
 from datetime import datetime
 from app import db
 from app.models.usuario import Usuario
-from app.models.message import Message
+from app.models.mensagem import Message
 
 class Comentario(db.Model):
     __tablename__ = 'comentarios'

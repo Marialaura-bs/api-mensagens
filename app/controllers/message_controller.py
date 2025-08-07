@@ -1,14 +1,14 @@
-from ..models.message import Message
+from ..models.mensagem import Mensagem
 from .. import db
 
 def listar_mensagens():
-    return Message.query.all()
+    return Mensagem.query.all()
 
 def obter_mensagem(message_id):
-    return Message.query.get(message_id)  # Retorna None se não encontrar
+    return Mensagem.query.get(message_id)  # Retorna None se não encontrar
 
 def criar_mensagem(dados):
-    nova = Message(**dados)
+    nova = Mensagem(**dados)
     db.session.add(nova)
     db.session.commit()
     return nova

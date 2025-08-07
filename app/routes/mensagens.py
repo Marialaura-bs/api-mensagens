@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .. import db
-from ..schemas.message_schema import MessageSchema
+from ..schemas.mensagem_schema import MessageSchema
 from ..controllers import message_controller
 from ..middlewares.message_required import mensagem_existe
 from flask_jwt_extended import jwt_required, get_jwt_identity

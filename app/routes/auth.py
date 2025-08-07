@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_refresh_token_required
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required
 from werkzeug.security import check_password_hash
 from ..models.usuario import Usuario
 from .. import db
@@ -21,8 +21,8 @@ def login():
     return jsonify({"access_token": token, "refresh_token":refresh_token}), 200
 
 @auth_bp.route("/refresh", methods=["POST"])
-@jwt_refresh_token_required
+@jwt_required(refresh=True)
 def refresh():
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user)
-    return jsonify({"access_token"=new_access_token}), 200
+    return jsonify({"access_token":new_access_token}), 200

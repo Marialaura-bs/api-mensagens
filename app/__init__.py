@@ -32,7 +32,7 @@ def create_app():
     app.register_blueprint(comentarios_bp)
 
     from app.routes.auth import auth_bp
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp, url_prefix='/auth')
 
     # Tratadores globais de erro
     register_error_handlers(app)

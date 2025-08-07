@@ -6,4 +6,4 @@ class Usuario(db.Model):
     nome = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     senha = db.Column(db.String(128), nullable=False)
-    admin = db.Column(db.Boolean, default=False)
+    perfil = db.Column(db.String(5), default='USER')

@@ -16,4 +16,4 @@ class UsuarioSchema(ma.SQLAlchemyAutoSchema):
     r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).+$',
     error="A senha deve conter ao menos uma letra maiúscula, uma minúscula, um número e um símbolo.")
     ])
-    perfil = fields.Bool(dump_only=True)
+    perfil = fields.Str()

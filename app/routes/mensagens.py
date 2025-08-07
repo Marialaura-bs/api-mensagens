@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from .. import db
 from ..schemas.message_schema import MessageSchema
 from ..controllers import message_controller

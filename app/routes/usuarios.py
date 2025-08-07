@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, abort
 from ..schemas.usuario_schema import UsuarioSchema
-from ..controllers import user_controller
+from app.controllers import usuario_controller
 from werkzeug.security import generate_password_hash
 
 usuarios_bp = Blueprint('users', __name__)
@@ -9,12 +9,12 @@ users_schema = UsuarioSchema(many=True)
 
 @usuarios_bp.route("/", methods=["GET"])
 def get_users():
-    users = user_controller.listar_usuarios()
+    users = usuario_controller.listar_usuarios()
     return users_schema.jsonify(users), 200
 
 @usuarios_bp.route("/<int:user_id>", methods=["GET"])
 def get_user(user_id):
-    user = user_controller.obter_usuario(user_id)
+    user = usuario_controller.obter_usuario(user_id)
     if not user:
         abort(404, description="Usuário não encontrado.")
     return user_schema.jsonify(user), 200
@@ -24,22 +24,22 @@ def create_user():
     data = request.get_json()
     data["senha"] = generate_password_hash(data["senha"])
     validated = user_schema.load(data)
-    novo = user_controller.criar_usuario(validated)
+    novo = usuario_controller.criar_usuario(validated)
     return user_schema.jsonify(novo), 201
 
 @usuarios_bp.route("/<int:user_id>", methods=["PUT"])
 def update_user(user_id):
-    user = user_controller.obter_usuario(user_id)
+    user = usuario_controller.obter_usuario(user_id)
     if not user:
         abort(404)
     data = user_schema.load(request.get_json(), partial=True)
-    atualizado = user_controller.atualizar_usuario(user, data)
+    atualizado = usuario_controller.atualizar_usuario(user, data)
     return user_schema.jsonify(atualizado), 200
 
 @usuarios_bp.route("/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    user = user_controller.obter_usuario(user_id)
+    user = usuario_controller.obter_usuario(user_id)
     if not user:
         abort(404)
-    user_controller.deletar_usuario(user)
+    usuario_controller.deletar_usuario(user)
     return '', 204

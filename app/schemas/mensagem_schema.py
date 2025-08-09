@@ -7,7 +7,7 @@ class MessageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Mensagem
         load_instance = False  
-        fields = ("id", "titulo", "conteudo", "usuario_id", "data_criacao")  # mantém a ordem do modelo
+        fields = ("id", "titulo", "conteudo", "usuario_id", "data_criacao", "comentario")  # mantém a ordem do modelo
     id = fields.Int(dump_only=True)
     titulo=fields.Str(required=True, validate=validate.Length(min=1))
     conteudo = fields.Str(required=True, validate=validate.Length(min=1))

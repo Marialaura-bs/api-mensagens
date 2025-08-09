@@ -34,7 +34,7 @@ def create_message():
 @mensagem_existe
 def update_message(message_id):
     if request.mensagem.usuario_id != int(get_jwt_identity()):
-        return jsonify({"error": "Acesso negado."}), 403
+        return jsonify({"error": "Você não tem permissão para alterar esta mensagem."}), 403
     data = message_schema.load(request.get_json())  # Atualização completa
     updated = message_controller.atualizar_mensagem(request.mensagem, data)
     return message_schema.jsonify(updated), 200
@@ -43,8 +43,8 @@ def update_message(message_id):
 @jwt_required()
 @mensagem_existe
 def partial_update_message(message_id):
-    if request.mensagem.user_id != int(get_jwt_identity()):
-        return jsonify({"error": "Acesso negado."}), 403
+    if request.mensagem.usuario_id != int(get_jwt_identity()):
+        return jsonify({"error": "Você não tem permissão para alterar esta mensagem."}), 403
     data = message_schema.load(request.get_json(), partial=True)  # Atualização parcial
     updated = message_controller.atualizar_mensagem(request.mensagem, data)
     return message_schema.jsonify(updated), 200
@@ -53,7 +53,7 @@ def partial_update_message(message_id):
 @jwt_required()
 @mensagem_existe
 def delete_message(message_id):
-    if request.mensagem.user_id != get_jwt_identity():
-        return jsonify({"error": "Acesso negado."}), 403
+    if request.mensagem.usuario_id != int(get_jwt_identity()):
+        return jsonify({"error": "Você não tem permissão para excluir esta mensagem."}), 403
     message_controller.deletar_mensagem(request.mensagem)
     return '', 204

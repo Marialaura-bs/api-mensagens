@@ -10,5 +10,5 @@ class MessageSchema(ma.SQLAlchemyAutoSchema):
     id = fields.Int(dump_only=True)
     titulo=fields.Str(required=True, validate=validate.Length(min=1))
     conteudo = fields.Str(required=True, validate=validate.Length(min=1))
-    usuario_id = fields.Int(load_only=True)
+    usuario_id = fields.Int(dump_only=True)
     data_criacao = fields.DateTime(dump_only=True)

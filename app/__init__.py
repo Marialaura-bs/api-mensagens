@@ -36,6 +36,7 @@ def create_app():
 
     # Tratadores globais de erro
     register_error_handlers(app)
+    register_jwt_error_handlers(jwt)
 
     return app
 
@@ -75,6 +76,6 @@ def register_jwt_error_handlers(jwt):
     def expired_token_callback(jwt_header, jwt_payload):
         return jsonify({"error": "Token JWT expirado", "message": "Renove o token"}), 401
 
-    @jwt.wrong_token_loader
+    @jwt.revoked_token_loader
     def wrong_token_callback(error):
         return jsonify({"error": "Tipo de token inválido", "message": error}), 422

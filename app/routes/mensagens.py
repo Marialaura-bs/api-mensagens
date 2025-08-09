@@ -33,7 +33,7 @@ def create_message():
 @jwt_required()
 @mensagem_existe
 def update_message(message_id):
-    if request.mensagem.usuario_id != get_jwt_identity():
+    if request.mensagem.usuario_id != int(get_jwt_identity()):
         return jsonify({"error": "Acesso negado."}), 403
     data = message_schema.load(request.get_json())  # Atualização completa
     updated = message_controller.atualizar_mensagem(request.mensagem, data)

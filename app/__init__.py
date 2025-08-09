@@ -61,3 +61,20 @@ def register_error_handlers(app):
             "error": "Internal Server Error",
             "message": str(error)
         }), 500
+
+def register_jwt_error_handlers(jwt):
+    @jwt.unauthorized_loader
+    def unauthorized_callback(error):
+        return jsonify({"error": "Token JWT ausente ou inválido", "message": error}), 401
+
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return jsonify({"error": "Token JWT inválido", "message": error}), 422
+
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return jsonify({"error": "Token JWT expirado", "message": "Renove o token"}), 401
+
+    @jwt.wrong_token_loader
+    def wrong_token_callback(error):
+        return jsonify({"error": "Tipo de token inválido", "message": error}), 422

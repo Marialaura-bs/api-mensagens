@@ -1,8 +1,8 @@
 """criando db
 
-Revision ID: f5ed486cefb5
+Revision ID: f0f6b59ac6f8
 Revises: 
-Create Date: 2025-08-09 19:51:01.475097
+Create Date: 2025-08-09 20:12:58.052137
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f5ed486cefb5'
+revision = 'f0f6b59ac6f8'
 down_revision = None
 branch_labels = None
 depends_on = None

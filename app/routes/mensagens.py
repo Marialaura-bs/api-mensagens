@@ -14,9 +14,9 @@ def get_messages():
     messages = message_controller.listar_mensagens()
     return messages_schema.jsonify(messages), 200
 
-@mensagens_bp.route('/<int:message_id>', methods=['GET'])
+@mensagens_bp.route('/<int:mensagem_id>', methods=['GET'])
 @mensagem_existe
-def get_message(message_id):
+def get_message(mensagem_id):
     return message_schema.jsonify(request.mensagem), 200
 
 @mensagens_bp.route('/', methods=['POST'])
@@ -29,30 +29,30 @@ def create_message():
     return message_schema.jsonify(message), 201
 
 
-@mensagens_bp.route('/<int:message_id>', methods=['PUT'])
+@mensagens_bp.route('/<int:mensagem_id>', methods=['PUT'])
 @jwt_required()
 @mensagem_existe
-def update_message(message_id):
+def update_message(mensagem_id):
     if request.mensagem.usuario_id != int(get_jwt_identity()):
         return jsonify({"error": "Você não tem permissão para alterar esta mensagem."}), 403
     data = message_schema.load(request.get_json())  # Atualização completa
     updated = message_controller.atualizar_mensagem(request.mensagem, data)
     return message_schema.jsonify(updated), 200
 
-@mensagens_bp.route('/<int:message_id>', methods=['PATCH'])
+@mensagens_bp.route('/<int:mensagem_id>', methods=['PATCH'])
 @jwt_required()
 @mensagem_existe
-def partial_update_message(message_id):
+def partial_update_message(mensagem_id):
     if request.mensagem.usuario_id != int(get_jwt_identity()):
         return jsonify({"error": "Você não tem permissão para alterar esta mensagem."}), 403
     data = message_schema.load(request.get_json(), partial=True)  # Atualização parcial
     updated = message_controller.atualizar_mensagem(request.mensagem, data)
     return message_schema.jsonify(updated), 200
 
-@mensagens_bp.route('/<int:message_id>', methods=['DELETE'])
+@mensagens_bp.route('/<int:mensagem_id>', methods=['DELETE'])
 @jwt_required()
 @mensagem_existe
-def delete_message(message_id):
+def delete_message(mensagem_id):
     if request.mensagem.usuario_id != int(get_jwt_identity()):
         return jsonify({"error": "Você não tem permissão para excluir esta mensagem."}), 403
     message_controller.deletar_mensagem(request.mensagem)

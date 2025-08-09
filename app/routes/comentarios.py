@@ -9,19 +9,19 @@ comentarios_bp = Blueprint('comentarios', __name__)
 comment_schema = ComentarioSchema()
 comments_schema = ComentarioSchema(many=True)
 
-@comentarios_bp.route('/mensagens/<int:mensagem>/comments', methods=['GET'])
+@comentarios_bp.route('/mensagens/<int:mensagem>/comentarios', methods=['GET'])
 @mensagem_existe
 def get_comments(mensagem):
     comments = comment_controller.listar_comentarios(mensagem)
     return comments_schema.jsonify(comments), 200
 
-@comentarios_bp.route('/mensagens/<int:mensagem>/comments/<int:comment_id>', methods=['GET'])
+@comentarios_bp.route('/mensagens/<int:mensagem>/comentarios/<int:comment_id>', methods=['GET'])
 @mensagem_existe
 @comentario_existe
 def get_comment(mensagem, comment_id):
     return comment_schema.jsonify(request.comentario), 200
 
-@comentarios_bp.route('/mensagens/<int:message_id>/comments', methods=['POST'])
+@comentarios_bp.route('/mensagens/<int:message_id>/comentarios', methods=['POST'])
 @jwt_required()
 @mensagem_existe
 def create_comment(message_id):
@@ -33,7 +33,7 @@ def create_comment(message_id):
     comment = comment_controller.criar_comentario(validated_data)
     return comment_schema.jsonify(comment), 201
 
-@comentarios_bp.route('/mensagens/<int:mensagem>/comments/<int:comment_id>', methods=['PUT'])
+@comentarios_bp.route('/mensagens/<int:mensagem>/comentarios/<int:comment_id>', methods=['PUT'])
 @jwt_required()
 @mensagem_existe
 @comentario_existe
@@ -46,7 +46,7 @@ def update_comment(mensagem, comment_id):
     updated = comment_controller.atualizar_comentario(request.comentario, validated_data)
     return comment_schema.jsonify(updated), 200
 
-@comentarios_bp.route('/mensagens/<int:mensagem>/comments/<int:comment_id>', methods=['PATCH'])
+@comentarios_bp.route('/mensagens/<int:mensagem>/comentarios/<int:comment_id>', methods=['PATCH'])
 @jwt_required()
 @mensagem_existe
 @comentario_existe
@@ -58,7 +58,7 @@ def partial_update_comment(mensagem, comment_id):
     updated = comment_controller.atualizar_comentario(request.comentario, validated_data)
     return comment_schema.jsonify(updated), 200
 
-@comentarios_bp.route('/mensagens/<int:mensagem>/comments/<int:comment_id>', methods=['DELETE'])
+@comentarios_bp.route('/mensagens/<int:mensagem>/comentarios/<int:comment_id>', methods=['DELETE'])
 @mensagem_existe
 @comentario_existe
 @jwt_required()

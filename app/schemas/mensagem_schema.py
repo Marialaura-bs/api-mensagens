@@ -1,6 +1,7 @@
 from .. import ma
 from marshmallow import fields, validate
 from ..models.mensagem import Mensagem
+from .comentario_schema import ComentarioSchema
 
 class MessageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -12,3 +13,6 @@ class MessageSchema(ma.SQLAlchemyAutoSchema):
     conteudo = fields.Str(required=True, validate=validate.Length(min=1))
     usuario_id = fields.Int(dump_only=True)
     data_criacao = fields.DateTime(dump_only=True)
+
+    # Campo aninhado de comentários
+    comentario = fields.Nested(ComentarioSchema, many=True, dump_only=True)

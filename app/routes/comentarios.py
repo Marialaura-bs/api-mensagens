@@ -21,13 +21,13 @@ def get_comments(mensagem_id):
 def get_comment(mensagem_id, comment_id):
     return comment_schema.jsonify(request.comentario), 200
 
-@comentarios_bp.route('/mensagens/<int:message_id>/comentarios', methods=['POST'])
+@comentarios_bp.route('/mensagens/<int:mensagem_id>/comentarios', methods=['POST'])
 @jwt_required()
 @mensagem_existe
-def create_comment(message_id):
+def create_comment(mensagem_id):
     user_id = get_jwt_identity()
     data = request.get_json()
-    data['mensagem_id'] = message_id
+    data['mensagem_id'] = mensagem_id
     data['usuario_id'] = user_id
     validated_data = comment_schema.load(data)
     comment = comment_controller.criar_comentario(validated_data)

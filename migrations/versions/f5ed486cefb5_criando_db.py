@@ -1,8 +1,8 @@
-"""salvando
+"""criando db
 
-Revision ID: 955ff7da612d
+Revision ID: f5ed486cefb5
 Revises: 
-Create Date: 2025-08-09 18:16:58.273060
+Create Date: 2025-08-09 19:51:01.475097
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '955ff7da612d'
+revision = 'f5ed486cefb5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,12 +38,12 @@ def upgrade():
     )
     op.create_table('comentarios',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('content', sa.String(length=255), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('autor', sa.Integer(), nullable=True),
-    sa.Column('mensagem', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['autor'], ['usuarios.id'], ),
-    sa.ForeignKeyConstraint(['mensagem'], ['mensagens.id'], ),
+    sa.Column('conteudo', sa.String(length=255), nullable=False),
+    sa.Column('usuario_id', sa.Integer(), nullable=True),
+    sa.Column('mensagem_id', sa.Integer(), nullable=True),
+    sa.Column('data_criacao', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['mensagem_id'], ['mensagens.id'], ),
+    sa.ForeignKeyConstraint(['usuario_id'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

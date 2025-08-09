@@ -6,16 +6,16 @@ from app.models.mensagem import Mensagem
 class Comentario(db.Model):
     __tablename__ = 'comentarios'
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    autor = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
-    mensagem = db.Column(db.Integer, db.ForeignKey('mensagens.id'))
+    conteudo = db.Column(db.String(255), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
+    mensagem_id = db.Column(db.Integer, db.ForeignKey('mensagens.id'))
+    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         return {
             "id": self.id,
-            "autor":self.autor,
-            "mensagem":self.mensagem,
-            "content": self.content,
-            "created_at": self.created_at.isoformat()
+            "conteudo": self.conteudo,
+            "usuario_id":self.usuario_id,
+            "mensagem_id":self.mensagem_id,
+            "data_criacao": self.data_criacao.isoformat()
         }

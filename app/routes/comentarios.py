@@ -27,8 +27,8 @@ def get_comment(mensagem, comment_id):
 def create_comment(message_id):
     user_id = get_jwt_identity()
     data = request.get_json()
-    data['message_id'] = message_id
-    data['autor'] = user_id
+    data['mensagem_id'] = message_id
+    data['usuario_id'] = user_id
     validated_data = comment_schema.load(data)
     comment = comment_controller.criar_comentario(validated_data)
     return comment_schema.jsonify(comment), 201
@@ -38,7 +38,7 @@ def create_comment(message_id):
 @mensagem_existe
 @comentario_existe
 def update_comment(mensagem, comment_id):
-    if request.mensagem.user_id != get_jwt_identity():
+    if request.mensagem.usuario_id != get_jwt_identity():
         return jsonify({"error": "Acesso negado."}), 403
     data = request.get_json()
     data['mensagem'] = mensagem

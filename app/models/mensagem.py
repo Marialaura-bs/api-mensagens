@@ -10,6 +10,13 @@ class Mensagem(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Relacionamento com Comentario
+    comentario = db.relationship(
+        "Comentario",
+        backref="mensagem",
+        lazy="joined"  # ou "selectin"
+    )
+    
     def to_dict(self):
         return {
             "id": self.id,

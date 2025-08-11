@@ -38,7 +38,9 @@ def create_comment(mensagem_id):
 @mensagem_existe
 @comentario_existe
 def update_comment(mensagem_id, comment_id):
-    if request.mensagem.usuario_id != get_jwt_identity():
+    user_id = get_jwt_identity()
+    user = usuario_controller.obter_usuario(user_id)
+    if request.mensagem.usuario_id != int(get_jwt_identity()) and user.perfil!='ADMIN':
         return jsonify({"error": "Acesso negado."}), 403
     data = request.get_json()
     data['mensagem_id'] = mensagem_id
@@ -51,7 +53,9 @@ def update_comment(mensagem_id, comment_id):
 @mensagem_existe
 @comentario_existe
 def partial_update_comment(mensagem_id, comment_id):
-    if request.mensagem.usuario_id != get_jwt_identity():
+    user_id = get_jwt_identity()
+    user = usuario_controller.obter_usuario(user_id)
+    if request.mensagem.usuario_id != int(get_jwt_identity()) and user.perfil!='ADMIN':
         return jsonify({"error": "Acesso negado."}), 403
     data = request.get_json()
     validated_data = comment_schema.load(data, partial=True)
@@ -63,7 +67,9 @@ def partial_update_comment(mensagem_id, comment_id):
 @comentario_existe
 @jwt_required()
 def delete_comment(mensagem_id, comment_id):
-    if request.mensagem.usuario_id != get_jwt_identity():
+    user_id = get_jwt_identity()
+    user = usuario_controller.obter_usuario(user_id)
+    if request.mensagem.usuario_id != int(get_jwt_identity()) and user.perfil!='ADMIN':
         return jsonify({"error": "Acesso negado."}), 403
     comment_controller.deletar_comentario(request.comentario)
     return '', 204

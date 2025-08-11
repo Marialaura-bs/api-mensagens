@@ -9,6 +9,7 @@ class Mensagem(db.Model):
     conteudo = db.Column(db.String(255), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    editado=db.Column(db.Boolean, default=False)
 
     # Relacionamento com Comentario
     comentario = db.relationship(

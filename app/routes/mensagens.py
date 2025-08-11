@@ -34,9 +34,7 @@ def create_message():
 @jwt_required()
 @mensagem_existe
 def update_message(mensagem_id):
-    user_id = get_jwt_identity()
-    user = usuario_controller.obter_usuario(user_id)
-    if request.mensagem.usuario_id != int(get_jwt_identity()) and user.perfil!='ADMIN':
+    if request.mensagem.usuario_id != int(get_jwt_identity()):
         return jsonify({"error": "Você não tem permissão para alterar esta mensagem."}), 403
     data = message_schema.load(request.get_json())  # Atualização completa
     updated = message_controller.atualizar_mensagem(request.mensagem, data)
@@ -46,9 +44,7 @@ def update_message(mensagem_id):
 @jwt_required()
 @mensagem_existe
 def partial_update_message(mensagem_id):
-    user_id = get_jwt_identity()
-    user = usuario_controller.obter_usuario(user_id)
-    if request.mensagem.usuario_id != int(get_jwt_identity()) and user.perfil!='ADMIN':
+    if request.mensagem.usuario_id != int(get_jwt_identity()):
         return jsonify({"error": "Você não tem permissão para alterar esta mensagem."}), 403
     data = message_schema.load(request.get_json(), partial=True)  # Atualização parcial
     updated = message_controller.atualizar_mensagem(request.mensagem, data)

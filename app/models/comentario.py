@@ -10,6 +10,7 @@ class Comentario(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     mensagem_id = db.Column(db.Integer, db.ForeignKey('mensagens.id'))
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    editado=db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         return {

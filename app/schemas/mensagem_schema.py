@@ -7,12 +7,12 @@ class MessageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Mensagem
         load_instance = False  
-        fields = ("id", "titulo", "conteudo", "usuario_id", "data_criacao", "comentario")  # mantém a ordem do modelo
+        fields = ("id", "titulo", "conteudo", "usuario_id", "data_criacao", "comentario", "editado")  # mantém a ordem do modelo
     id = fields.Int(dump_only=True)
     titulo=fields.Str(required=True, validate=validate.Length(min=1))
     conteudo = fields.Str(required=True, validate=validate.Length(min=1))
     usuario_id = fields.Int(dump_only=True)
     data_criacao = fields.DateTime(dump_only=True)
-
     # Campo aninhado de comentários
     comentario = fields.Nested(ComentarioSchema, many=True, dump_only=True)
+    editado=fields.Boolean(dump_only=True)

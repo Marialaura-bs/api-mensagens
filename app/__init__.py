@@ -47,7 +47,7 @@ def register_error_handlers(app):
         return jsonify({
             "error": "Validation Error",
             "messages": error.messages
-        }), 400
+        }), 422
 
     @app.errorhandler(HTTPException)
     def handle_http_exception(error):

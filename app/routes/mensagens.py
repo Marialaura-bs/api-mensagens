@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from .. import db
 from ..schemas.mensagem_schema import MessageSchema
 from ..controllers import message_controller
+from ..controllers import usuario_controller
 from ..middlewares.message_required import mensagem_existe
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -53,7 +54,9 @@ def partial_update_message(mensagem_id):
 @jwt_required()
 @mensagem_existe
 def delete_message(mensagem_id):
-    if request.mensagem.usuario_id != int(get_jwt_identity()):
+    user_id = get_jwt_identity()
+    user = usuario_controller.obter_usuario(user_id)
+    if request.mensagem.usuario_id != int(get_jwt_identity()) and user.perfil!='ADMIN':
         return jsonify({"error": "Você não tem permissão para excluir esta mensagem."}), 403
     message_controller.deletar_mensagem(request.mensagem)
     return '', 204
